@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Disabled;
 
 
 /**
- * @author alumno
+ * @author Sofía Calavia
  *
  */
 public class ReusablePoolTest {
