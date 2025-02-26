@@ -36,7 +36,10 @@ public class ReusablePoolTest {
         @DisplayName("testGetInstance")
         @Disabled("Not implemented yet")
 	public void testGetInstance() {
-		
+		ReusablePool instance1 = ReusablePool.getInstance();
+      		Assert.assertNotNull("La instancia adquirida no debe ser nula", instance1);
+      		ReusablePool instance2 = ReusablePool.getInstance();
+      		Assert.assertSame(instance1, instance2);		
 	}
 
 	/**
