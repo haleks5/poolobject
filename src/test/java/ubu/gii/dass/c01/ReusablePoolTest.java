@@ -70,16 +70,20 @@ public class ReusablePoolTest {
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
 	 */
+	/**
+ 	* @author Andres Puentes
+	 *
+ 	*/
 	@Test
-  	@DisplayName("testReleaseReusable")
-    	public void testReleaseReusable() {
+  @DisplayName("testReleaseReusable")
+  public void testReleaseReusable() {
         	Reusable reusable = pool.acquireReusable();
         	assertNotNull(reusable, "El objeto adquirido no debe ser nulo");
 
-        	pool.releaseReusable(reusable);
+       	 	pool.releaseReusable(reusable);
         
-        // Comprobar que el objeto está disponible después de la liberación
-        assertTrue(pool.isAvailable(reusable), "El objeto debería estar disponible después de ser liberado");
-    }
+        	// Comprobar que el objeto está disponible después de la liberación
+        	assertTrue(pool.isAvailable(reusable), "El objeto debería estar disponible después de ser liberado");
+    	}	
 
 }
