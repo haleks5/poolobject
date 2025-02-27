@@ -6,6 +6,7 @@ package ubu.gii.dass.c01;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.AfterAll;
@@ -68,6 +69,10 @@ public class ReusablePoolTest {
 
 			// Verifica que el objeto reusable adquirido no es nulo
 			assertNotNull(reusable,"El objeto reusable adquirido no debería ser nulo");
+
+			// Verifica que el objeto adquirido es una instancia de la clase Reusable
+        	assertTrue(reusable instanceof Reusable, "El objeto adquirido debe ser una instancia de Reusable");
+
 		} catch (NotFreeInstanceException e) {
 			// Si hay excepción, imprimirá un mensaje de error
 			fail("No se lanzaría una excepción si hemos adquirirido un objeto reusable del pool");
@@ -100,6 +105,7 @@ public class ReusablePoolTest {
 
 			//Verifica que el poll tiene un objeto antes de liberarlo
 			 assertNotNull(pool.acquireReusable(), "El pool debería tener al menos un objeto reusable después de liberarlo");
+
 		 } catch (DuplicatedInstanceException e) {
 			//Si se lanza una excepción, imprime un mensaje de error
 			fail("No debería saltar una excepcion al liberar un objeto reusable");
