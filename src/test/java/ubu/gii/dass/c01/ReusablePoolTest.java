@@ -72,7 +72,6 @@ public class ReusablePoolTest {
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
 		 * @throws NotFreeInstanceException 
 		 */
-		
 		 @Test
 		 @DisplayName("testReleaseReusable")
 		 public void testReleaseReusable() throws DuplicatedInstanceException, NotFreeInstanceException {
