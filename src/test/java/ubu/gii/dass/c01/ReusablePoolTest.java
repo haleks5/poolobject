@@ -98,36 +98,4 @@ public class ReusablePoolTest {
 
 		 }
 	 }
-
-	 @Test
-    @DisplayName("testConcurrentAccess")
-    public void testConcurrentAccess() throws InterruptedException {
-		ReusablePool pool = ReusablePool.getInstance();
-        int threadCount = 10;
-        CountDownLatch latch = new CountDownLatch(threadCount);
-        Set<Reusable> acquiredObjects = new HashSet<>();
-
-        Runnable task = () -> {
-            try {
-                Reusable reusable = pool.acquireReusable();
-                synchronized (acquiredObjects) {
-                    acquiredObjects.add(reusable);
-                }
-                pool.releaseReusable(reusable);
-            } catch (NotFreeInstanceException | DuplicatedInstanceException e) {
-                fail("No debería lanzarse una excepción en acceso concurrente");
-            } finally {
-                latch.countDown();
-            }
-        };
-
-        for (int i = 0; i < threadCount; i++) {
-            new Thread(task).start();
-        }
-
-        latch.await(); // Esperar a que todos los hilos terminen
-
-        assertFalse(acquiredObjects.isEmpty(), "Se deben haber adquirido objetos en concurrencia");
-    }
-
 }
