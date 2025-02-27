@@ -41,7 +41,7 @@ public class ReusablePoolTest {
         @DisplayName("testGetInstance")
 	public void testGetInstance() {
 		ReusablePool instance1 = ReusablePool.getInstance();
-      		assertNotNull("La instancia adquirida no debe ser nula", instance1);
+      		assertNotNull (instance1,"La instancia adquirida no debe ser nula");
 
       		ReusablePool instance2 = ReusablePool.getInstance();
       		assertSame(instance1, instance2);		
@@ -59,7 +59,7 @@ public class ReusablePoolTest {
 		try {
 			Reusable reusable = pool.acquireReusable();
 
-			assertNotNull("El objeto reusable adquirido no debería ser nulo", reusable);
+			assertNotNull(reusable,"El objeto reusable adquirido no debería ser nulo");
 		} catch (NotFreeInstanceException e) {
 			fail("No se lanzaría una excepción si hemos adquirirido un objeto reusable del pool");
         }
