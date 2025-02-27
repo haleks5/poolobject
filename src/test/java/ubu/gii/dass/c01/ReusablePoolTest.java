@@ -49,9 +49,17 @@ public class ReusablePoolTest {
 	 */
 	@Test
         @DisplayName("testAcquireReusable")
-        @Disabled("Not implemented yet")
 
 	public void testAcquireReusable() {
+		ReusablePool pool = ReusablePool.getInstance();
+
+		try {
+			Reusable reusable = pool.acquireReusable();
+
+			assertNotNull("El objeto reusable adquirido no debería ser nulo", reusable);
+		} catch (NotFreeInstanceException e) {
+			fail("No se lanzaría una excepción si hemos adquirirido un objeto reusable del pool");
+        }
 		
 	}
 
