@@ -62,7 +62,6 @@ public class ReusablePoolTest {
 			Reusable reusable = pool.acquireReusable();
 
 			assertNotNull(reusable,"El objeto reusable adquirido no debería ser nulo");
-			assertTrue(reusable instanceof Reusable, "El objeto adquirido debe ser una instancia de Reusable");
 		} catch (NotFreeInstanceException e) {
 			fail("No se lanzaría una excepción si hemos adquirirido un objeto reusable del pool");
         }
