@@ -62,6 +62,7 @@ public class ReusablePoolTest {
 			Reusable reusable = pool.acquireReusable();
 
 			assertNotNull(reusable,"El objeto reusable adquirido no debería ser nulo");
+			assertTrue(reusable instanceof Reusable, "El objeto adquirido debe ser una instancia de Reusable");
 		} catch (NotFreeInstanceException e) {
 			fail("No se lanzaría una excepción si hemos adquirirido un objeto reusable del pool");
         }
@@ -84,6 +85,7 @@ public class ReusablePoolTest {
 			 Reusable acqReusable = pool.acquireReusable();
 
 			 assertEquals(reusable, acqReusable, "El objeto que ha sido adquirido debe ser el mismo que el liberado");
+			 assertNotNull(pool.acquireReusable(), "El pool debería tener al menos un objeto reusable después de liberarlo");
 		 } catch (DuplicatedInstanceException e) {
 			fail("No debería saltar una excepcion al liberar un objeto reusable");
 
