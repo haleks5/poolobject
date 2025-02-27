@@ -3,21 +3,23 @@
  */
 package ubu.gii.dass.c01;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Disabled;
 
 
 
 /**
  * @author Sofía Calavia
+ * @author Andrés Puentes
+ * @author Mario Cea
+ * @author Alejandro García
  *
  */
 public class ReusablePoolTest {
@@ -68,21 +70,27 @@ public class ReusablePoolTest {
 
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
-	 */
-	/**
- 	* @author Andres Puentes
-	 *
- 	*/
-	@Test
-   	@DisplayName("testReleaseReusable")
-   	public void testReleaseReusable() {
-        	Reusable reusable = pool.acquireReusable();
-        	assertNotNull(reusable, "El objeto adquirido no debe ser nulo");
+		 * @throws NotFreeInstanceException 
+		 */
+		
+		 @Test
+		 @DisplayName("testReleaseReusable")
+		 public void testReleaseReusable() throws DuplicatedInstanceException, NotFreeInstanceException {
+	 ReusablePool pool = ReusablePool.getInstance();
+		 Reusable reusable = new Reusable();
 
-       	 	pool.releaseReusable(reusable);
-        
-        	// Comprobar que el objeto está disponible después de la liberación
-        	assertTrue(pool.isAvailable(reusable), "El objeto debería estar disponible después de ser liberado");
-    	}	
+		 try{
+			 pool.releaseReusable(reusable);
 
+			 Reusable acqReusable = pool.acquireReusable();
+
+			 assertEquals(reusable, acqReusable, "El objeto que ha sido adquirido debe ser el mismo que el liberado");
+		 } catch (DuplicatedInstanceException e) {
+			fail("No debería saltar una excepcion al liberar un objeto reusable");
+
+		 } catch (NotFreeInstanceException e) {
+			fail("No se debe lanzar una excepción al adquirir un objeto reusable");
+
+		 }
+	 }
 }
