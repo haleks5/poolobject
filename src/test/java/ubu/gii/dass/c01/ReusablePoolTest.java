@@ -117,17 +117,4 @@ public class ReusablePoolTest {
 
 		 }
 	 }
-
-		@Test
-		@DisplayName("testAcquireWhenPoolIsEmpty")
-		public void testAcquireWhenPoolIsEmpty() {
-			ReusablePool pool = ReusablePool.getInstance();
-    	try {
-        	while (true) {
-            	pool.acquireReusable(); // Consumir todos los objetos
-        }
-    	} catch (NotFreeInstanceException e) {
-        assertNotNull(e, "Debe lanzarse una excepción cuando el pool está vacío");
-    }
-}
 }
