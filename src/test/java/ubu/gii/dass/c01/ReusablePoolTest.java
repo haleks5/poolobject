@@ -4,9 +4,14 @@
 package ubu.gii.dass.c01;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -93,4 +98,36 @@ public class ReusablePoolTest {
 
 		 }
 	 }
+
+	 @Test
+    @DisplayName("testConcurrentAccess")
+    public void testConcurrentAccess() throws InterruptedException {
+		ReusablePool pool = ReusablePool.getInstance();
+        int threadCount = 10;
+        CountDownLatch latch = new CountDownLatch(threadCount);
+        Set<Reusable> acquiredObjects = new HashSet<>();
+
+        Runnable task = () -> {
+            try {
+                Reusable reusable = pool.acquireReusable();
+                synchronized (acquiredObjects) {
+                    acquiredObjects.add(reusable);
+                }
+                pool.releaseReusable(reusable);
+            } catch (NotFreeInstanceException | DuplicatedInstanceException e) {
+                fail("No debería lanzarse una excepción en acceso concurrente");
+            } finally {
+                latch.countDown();
+            }
+        };
+
+        for (int i = 0; i < threadCount; i++) {
+            new Thread(task).start();
+        }
+
+        latch.await(); // Esperar a que todos los hilos terminen
+
+        assertFalse(acquiredObjects.isEmpty(), "Se deben haber adquirido objetos en concurrencia");
+    }
+
 }
