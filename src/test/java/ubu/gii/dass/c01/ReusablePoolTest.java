@@ -19,9 +19,11 @@ import org.junit.jupiter.api.Disabled;
  */
 public class ReusablePoolTest {
 
-	
+	/**
+	 * @throws java.lang.Exception
+	 */
 	@BeforeAll
-	public static void setUp(){
+	public static void setUp() throws Exception{
 	}
 
 	
@@ -36,9 +38,10 @@ public class ReusablePoolTest {
         @DisplayName("testGetInstance")
 	public void testGetInstance() {
 		ReusablePool instance1 = ReusablePool.getInstance();
-      		Assert.assertNotNull("La instancia adquirida no debe ser nula", instance1);
+      		assertNotNull("La instancia adquirida no debe ser nula", instance1);
+
       		ReusablePool instance2 = ReusablePool.getInstance();
-      		Assert.assertSame(instance1, instance2);		
+      		assertSame(instance1, instance2);		
 	}
 
 	/**
