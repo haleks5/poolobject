@@ -159,5 +159,22 @@ public class ReusablePoolTest {
 				   "Util string should contain the expected message");
 	}
 
+	/**
+	 * Test method for exception classes.
+	 */
+	@Test
+	@DisplayName("testExceptionMessages")
+	public void testExceptionMessages() {
+		NotFreeInstanceException notFreeEx = new NotFreeInstanceException();
+		assertEquals("No hay más instancias reutilizables disponibles. Reintentalo más tarde", 
+					 notFreeEx.getMessage(), 
+					 "NotFreeInstanceException should have correct message");
+		
+		DuplicatedInstanceException dupEx = new DuplicatedInstanceException();
+		assertEquals("Ya existe esa instancia en el pool.", 
+					 dupEx.getMessage(), 
+					 "DuplicatedInstanceException should have correct message");
+	}
+
 	
 }
