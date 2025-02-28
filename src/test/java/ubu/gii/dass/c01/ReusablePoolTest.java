@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ubu.gii.dass.c01;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,13 +8,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-/**
- * @author Sofía Calavia
- * @author Andrés Puentes
- * @author Mario Cea
- * @author Alejandro García
- *
- */
+
 public class ReusablePoolTest {
 	/**
 	 * @throws java.lang.Exception
@@ -46,9 +37,24 @@ public class ReusablePoolTest {
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#acquireReusable()}.
 	*/
+		@Test
+    	@DisplayName("testAcquireReusable")
+	public void testAcquireReusable() {
+		// Crear una instancia del pool
+		ReusablePool pool = ReusablePool.getInstance();
+		try {
+			//Va a adquirir un objeto reusable del pool
+			Reusable reusable = pool.acquireReusable();
+			// Verifica que el objeto reusable adquirido no es nulo
+			assertNotNull(reusable,"El objeto reusable adquirido no debería ser nulo");
+			// Verifica que el objeto adquirido es una instancia de la clase Reusable
+        	assertTrue(reusable instanceof Reusable, "El objeto adquirido debe ser una instancia de Reusable");
+		} catch (NotFreeInstanceException e) {
+			// Si hay excepción, imprimirá un mensaje de error
+			fail("No se lanzaría una excepción si hemos adquirirido un objeto reusable del pool");
+        }
 		
-		
-	
+	}
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
 		 * @throws NotFreeInstanceException 
@@ -88,24 +94,19 @@ public class ReusablePoolTest {
 		ReusablePool pool = ReusablePool.getInstance();
 		
 		try {
-			// Acquire all available reusables (the pool has a size of 2)
 			Reusable r1 = pool.acquireReusable();
 			Reusable r2 = pool.acquireReusable();
 			
-			// Verify both objects were acquired
 			assertNotNull(r1, "First reusable should not be null");
 			assertNotNull(r2, "Second reusable should not be null");
-			
-			// Try to acquire a third reusable (should throw NotFreeInstanceException)
+
 			try {
 				pool.acquireReusable();
 				fail("Should have thrown NotFreeInstanceException");
 			} catch (NotFreeInstanceException e) {
-				// Expected exception
 				assertEquals("No hay más instancias reutilizables disponibles. Reintentalo más tarde", e.getMessage());
 			}
-			
-			// Clean up - return the objects to the pool
+
 			pool.releaseReusable(r1);
 			pool.releaseReusable(r2);
 			
@@ -120,22 +121,17 @@ public class ReusablePoolTest {
 	@Test
 	@DisplayName("testReleaseReusableDuplicated")
 	public void testReleaseReusableDuplicated() {
-		// Get the pool instance
 		ReusablePool pool = ReusablePool.getInstance();
 		
 		try {
-			// Acquire a reusable
 			Reusable reusable = pool.acquireReusable();
 			
-			// Release it back to the pool
 			pool.releaseReusable(reusable);
 			
-			// Try to release it again (should throw DuplicatedInstanceException)
 			try {
 				pool.releaseReusable(reusable);
 				fail("Should have thrown DuplicatedInstanceException");
 			} catch (DuplicatedInstanceException e) {
-				// Expected exception
 				assertEquals("Ya existe esa instancia en el pool.", e.getMessage());
 			}
 			
@@ -150,32 +146,25 @@ public class ReusablePoolTest {
 	@Test
 	@DisplayName("testPoolCycleOperations")
 	public void testPoolCycleOperations() {
-		// Get the pool instance
 		ReusablePool pool = ReusablePool.getInstance();
 		
 		try {
-			// Step 1: Acquire all available reusables
 			Reusable r1 = pool.acquireReusable();
 			Reusable r2 = pool.acquireReusable();
 			
-			// Step 2: Verify they are different objects
 			assertNotNull(r1, "First reusable should not be null");
 			assertNotNull(r2, "Second reusable should not be null");
 			assertTrue(r1 != r2, "Should be different objects");
 			
-			// Step 3: Release them in reverse order
 			pool.releaseReusable(r2);
 			pool.releaseReusable(r1);
 			
-			// Step 4: Reacquire and verify the order (LIFO - Last In First Out)
 			Reusable r3 = pool.acquireReusable();
 			Reusable r4 = pool.acquireReusable();
 			
-			// The pool should return objects in LIFO order
 			assertSame(r1, r3, "First released object should be first acquired");
 			assertSame(r2, r4, "Second released object should be second acquired");
 			
-			// Clean up
 			pool.releaseReusable(r3);
 			pool.releaseReusable(r4);
 			
@@ -190,13 +179,10 @@ public class ReusablePoolTest {
 	@Test
 	@DisplayName("testReusableUtil")
 	public void testReusableUtil() {
-		// Create a reusable object
 		Reusable reusable = new Reusable();
 		
-		// Get the util string
 		String utilString = reusable.util();
 		
-		// Verify it contains the expected format
 		assertTrue(utilString.contains(String.valueOf(reusable.hashCode())), 
 				   "Util string should contain the object's hashcode");
 		assertTrue(utilString.contains(":Uso del objeto Reutilizable"), 
@@ -209,13 +195,11 @@ public class ReusablePoolTest {
 	@Test
 	@DisplayName("testExceptionMessages")
 	public void testExceptionMessages() {
-		// Test NotFreeInstanceException
 		NotFreeInstanceException notFreeEx = new NotFreeInstanceException();
 		assertEquals("No hay más instancias reutilizables disponibles. Reintentalo más tarde", 
 					 notFreeEx.getMessage(), 
 					 "NotFreeInstanceException should have correct message");
 		
-		// Test DuplicatedInstanceException
 		DuplicatedInstanceException dupEx = new DuplicatedInstanceException();
 		assertEquals("Ya existe esa instancia en el pool.", 
 					 dupEx.getMessage(), 
